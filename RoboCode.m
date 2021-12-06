@@ -25,6 +25,7 @@ alpha4 = 0.01/2; % rate for small object to be delivered and a robot to be freed
 alpha5 = 0.002/2; % rate for a robot to take 10 small objects to make a large object
 beta = 0.0009/2; % rate for robot to disassemble a large object into 10 small objects
 
+k = [alpha1, alpha2, alpha3, alpha4, alpha5, beta];
 K = [alpha1, 0, 0, 0, 0, 0, 0, 0, 0, 0;
     -alpha1, 0, 0, 0, 0, 0, 0, 0, 0, 0;
     0, 0, alpha2, 0, 0, 0, 0, 0, 0, 0;
@@ -37,7 +38,10 @@ K = [alpha1, 0, 0, 0, 0, 0, 0, 0, 0, 0;
     0, 0, 0, 0, 0, 0, 0, 0, -alpha5, beta];
 
 [t,x] = ode45(@(t,x) odefun(t,x,M,K), tspan, x0);
-hold on;
+figure(1)
+hold on
+set(gca,'Fontsize',20);
+grid on
 plot(t,x(:,1),'r'); %robots
 plot(t,x(:,2),'g'); % small objects
 plot(t,x(:,3),'b'); % large objects
@@ -45,7 +49,69 @@ plot(t,x(:,4),'m'); % transporting large objects
 plot(t,x(:,5),'c'); % transporting small objects
 plot(t,x(:,6),'y'); % delivered large object
 plot(t,x(:,7),'k'); % delivered small object
-legend('Robots', 'Small Objects', 'Large Objects', 'Large Transportation', 'Small Transportation', 'Delivered Large', 'Delivered Small')
+
+
+%% Gillespie
+
+x0 = [0.1 0.3 0.6 0 0 0 0];
+m12 = M(:,2) - M(:,1); % reaction 1
+m34 = M(:,4) - M(:,3); % reaction 2
+m56 = M(:,6) - M(:,5); % reaction 3
+m78 = M(:,8) - M(:,7); % reaction 4
+m910 = M(:,10) - M(:,9); % reaction 5
+m109 = -m910; % reaction 6
+
+%Reaction vectors
+R = [m12 m34 m56 m78 m910 m109]';
+
+Ntot = 10000;
+
+c1 = alpha1/Ntot; % reaction 1
+c2 = alpha2/Ntot; % reaction 2
+c3 = alpha3/Ntot; % reaction 3
+c4 = alpha4/Ntot; % reaction 4
+c5 = alpha5/Ntot; % reaction 5
+c6 = beta/Ntot; % reaction 6
+
+
+t = 0;
+tfinal = 3600;
+N = Ntot*x0;
+tvec = t;
+Nvec = N/Ntot;
+
+while t < tfinal
+    
+    % Reaction propensities
+    a(1) = c1*N(1)*N(3); % reaction 1
+    a(2) = c2*N(1)*N(2); % reaction 2
+    a(3) = c3*N(4); % reaction 3
+    a(4) = c4*N(5); % reaction 4
+    a(5) = c5*N(2)*N(1); % reaction 5
+    a(6)= c6*N(3)*N(1);  % reaction 6
+     
+    asum = sum(a);
+    j = min(find(rand<cumsum(a/asum))); % index of the next reaction
+    tau = log(1/rand)/asum;
+    N = N + R(j,:); % simulate the reaction occurring;
+                    % update the integer population counts
+    t = t + tau; % time of the next reaction
+    tvec(end+1) = t;
+    Nvec(end+1,:) = N/Ntot;
+end
+
+
+plot(tvec,Nvec(:,1),'r','LineStyle','--'); %robots
+plot(tvec,Nvec(:,2),'g','LineStyle','--'); % small objects
+plot(tvec,Nvec(:,3),'b','LineStyle','--'); % large objects
+plot(tvec,Nvec(:,4),'m','LineStyle','--'); % transporting large objects
+plot(tvec,Nvec(:,5),'c','LineStyle','--'); % transporting small objects
+plot(tvec,Nvec(:,6),'y','LineStyle','--'); % delivered large object
+plot(tvec,Nvec(:,7),'k','LineStyle','--'); % delivered small object
+
+'Robots', 'Small Objects', 'Large Objects', 'Large Transportation', 'Small Transportation', 'Delivered Large', 'Delivered Small'
+%xlim([0 tfinal])
+%}
 
 function V = gma(D,k,L)
 %
