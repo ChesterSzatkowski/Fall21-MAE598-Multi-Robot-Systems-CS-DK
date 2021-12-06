@@ -7,10 +7,10 @@ clear all;
 clc;
 %% Numerical Solving
 species = 7;
-tspan = [0 1000]; %seconds
-x0 = [0.33, % initial robot population fraction
-    0.33, % initial small object population fraction
-    0.33, % initial large object population fraction
+tspan = [0 3600]; % seconds
+x0 = [0.1, % initial robot population fraction
+    0.3, % initial small object population fraction
+    0.6, % initial large object population fraction
     0, % initial large transportation population fraction
     0, % initial small transportation population fraction
     0, % initial delivered large object population fraction
@@ -18,12 +18,12 @@ x0 = [0.33, % initial robot population fraction
 
 M = readmatrix('M.txt');
 
-alpha1 = 0.02; % rate for robots working to move a large object into transportation phase
-alpha2 = 0.01; % rate for robot working to move a small object into transportation phase
-alpha3 = 0.01; % rate for large object to be delivered and 4 robots to be freed
-alpha4 = 0.01; % rate for small object to be delivered and a robot to be freed
-alpha5 = 0.003; % rate for a robot to take 10 small objects to make a large object
-beta = 0.001; % rate for robot to disassemble a large object into 10 small objects
+alpha1 = 0.05/2; % rate for robots working to move a large object into transportation phase
+alpha2 = 0.04/2; % rate for robot working to move a small object into transportation phase
+alpha3 = 0.02/2; % rate for large object to be delivered and 4 robots to be freed
+alpha4 = 0.01/2; % rate for small object to be delivered and a robot to be freed
+alpha5 = 0.007/2; % rate for a robot to take 10 small objects to make a large object
+beta = 0.001/2; % rate for robot to disassemble a large object into 10 small objects
 
 K = [alpha1, 0, 0, 0, 0, 0, 0, 0, 0, 0;
     -alpha1, 0, 0, 0, 0, 0, 0, 0, 0, 0;
