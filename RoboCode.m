@@ -18,7 +18,8 @@ x0 = [0.05, % initial robot population fraction
 
 Ntot = 1000;
 
-M = readmatrix('M.txt');
+M = [4 0 1 0 0 4 0 1 1 1; 0 0 1 0 0 0 0 0 10 0; 1 0 0 0 0 0 0 0 0 1; 0 1 0 0 1 0 0 0 0 0; 0 0 0 1 0 0 1 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 1 0 0];
+
 
 alpha1 = 0.08; % rate for robots working to move a large object into transportation phase
 alpha2 = 0.064; % rate for robot working to move a small object into transportation phase
