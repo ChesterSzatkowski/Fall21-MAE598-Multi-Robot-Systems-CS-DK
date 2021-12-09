@@ -2,6 +2,11 @@
 % https://www.mathworks.com/help/robotics/ug/path-planning-in-environments-of-difference-complexity.html
 % https://www.mathworks.com/help/robotics/ug/path-following-for-differential-drive-robot.html
 
+%% Initialize Video
+%myVideo = VideoWriter('myVideoFile'); %open video file
+%myVideo.FrameRate = 10;  %can adjust this, 5 - 10 works well for me
+%open(myVideo)
+
 %% Creating a map
 
 warehouseMap = readmatrix('map.txt'); % Matrix where 1 represents an obstacle and 0 represents a free space
@@ -103,6 +108,11 @@ while( distanceToGoal > goalRadius )
     light;
     xlim([0 40])
     ylim([0 40])
+    set(gcf, 'Position',  [100, 100, 1000, 850])
+    %pause(0.01)
+    %frame = getframe(gcf);
+    %writeVideo(myVideo, frame);
     
     waitfor(vizRate);
 end
+%close(myVideo);
