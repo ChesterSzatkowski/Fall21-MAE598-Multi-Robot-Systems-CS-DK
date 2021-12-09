@@ -124,7 +124,7 @@ legend('Robots', 'Small Objects', 'Large Objects', 'Large Transportation', 'Smal
 
 %% Comparing weakly-reversible system
 
-M2 = [4 0 1 0 0 4 0 1 1 1;
+M = [4 0 1 0 0 4 0 1 1 1;
     0 0 1 0 0 0 0 0 10 0;
     1 0 0 0 0 0 0 0 0 1;
     0 1 0 0 1 0 0 0 0 0;
@@ -132,20 +132,19 @@ M2 = [4 0 1 0 0 4 0 1 1 1;
     0 0 0 0 0 1 0 0 0 0;
     0 0 0 0 0 0 0 1 0 0];
 
-m12_2 = M2(:,2) - M2(:,1); % reaction 1
-m21_2 = -m12_2; % reaction 2
-m34_2 = M2(:,4) - M2(:,3); % reaction 3
-m43_2 = -m34_2; % reaction 4
-m56_2 = M2(:,6) - M2(:,5); % etc.
-m65_2 = -m56_2;
-m78_2 = M2(:,8) - M2(:,7);
-m87_2 = -m78_2;
-m910_2 = M2(:,10) - M2(:,9);
-m109_2 = -m910_2;
+m12 = M(:,2) - M(:,1); % reaction 1
+m21 = -m12; % reaction 2
+m34 = M(:,4) - M(:,3); % reaction 3
+m43 = -m34; % reaction 4
+m56 = M(:,6) - M(:,5); % etc.
+m65 = -m56;
+m78 = M(:,8) - M(:,7);
+m87 = -m78;
+m910 = M(:,10) - M(:,9);
+m109 = -m910;
 
 %Reaction vectors
-R2 = [m12_2 m21_2 m34_2 m43_2 m56_2 m65_2 m78_2 m87_2 m910_2 m109_2]';
-rank(R2)
+R = [m12 m21 m34 m43 m56 m65 m78 m87 m910 m109]';
 
 function V = gma(D,k,L)
 %
