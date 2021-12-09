@@ -18,7 +18,13 @@ x0 = [0.05, % initial robot population fraction
 
 Ntot = 1000;
 
-M = [4 0 1 0 0 4 0 1 1 1; 0 0 1 0 0 0 0 0 10 0; 1 0 0 0 0 0 0 0 0 1; 0 1 0 0 1 0 0 0 0 0; 0 0 0 1 0 0 1 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 1 0 0];
+M = [4 0 1 0 0 4 0 1 1 1;
+    0 0 1 0 0 0 0 0 10 0;
+    1 0 0 0 0 0 0 0 0 1;
+    0 1 0 0 1 0 0 0 0 0;
+    0 0 0 1 0 0 1 0 0 0;
+    0 0 0 0 0 1 0 0 0 0;
+    0 0 0 0 0 0 0 1 0 0];
 
 
 alpha1 = 0.08; % rate for robots working to move a large object into transportation phase
@@ -115,6 +121,31 @@ set(gcf, 'Position',  [100, 100, 1800, 900])
 legend('Robots', 'Small Objects', 'Large Objects', 'Large Transportation', 'Small Transportation', 'Delivered Large', 'Delivered Small');
 %xlim([0 tfinal])
 %}
+
+%% Comparing weakly-reversible system
+
+M2 = [4 0 1 0 0 4 0 1 1 1;
+    0 0 1 0 0 0 0 0 10 0;
+    1 0 0 0 0 0 0 0 0 1;
+    0 1 0 0 1 0 0 0 0 0;
+    0 0 0 1 0 0 1 0 0 0;
+    0 0 0 0 0 1 0 0 0 0;
+    0 0 0 0 0 0 0 1 0 0];
+
+m12_2 = M2(:,2) - M2(:,1); % reaction 1
+m21_2 = -m12_2; % reaction 2
+m34_2 = M2(:,4) - M2(:,3); % reaction 3
+m43_2 = -m34_2; % reaction 4
+m56_2 = M2(:,6) - M2(:,5); % etc.
+m65_2 = -m56_2;
+m78_2 = M2(:,8) - M2(:,7);
+m87_2 = -m78_2;
+m910_2 = M2(:,10) - M2(:,9);
+m109_2 = -m910_2;
+
+%Reaction vectors
+R2 = [m12_2 m21_2 m34_2 m43_2 m56_2 m65_2 m78_2 m87_2 m910_2 m109_2]';
+rank(R2)
 
 function V = gma(D,k,L)
 %
